@@ -1,0 +1,12 @@
+services:
+  uptime-kuma:
+    image: louislam/uptime-kuma:2   # swap for the exact release so Renovate can track it
+    container_name: uptime-kuma
+    restart: unless-stopped
+    volumes:
+      - /srv/appdata/uptime-kuma:/app/data
+    networks: [proxy]
+
+networks:
+  proxy:
+    external: true

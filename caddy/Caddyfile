@@ -1,0 +1,40 @@
+*.home.mrex.dev {
+	tls {
+		dns cloudflare {env.CF_API_TOKEN}
+		resolvers 1.1.1.1
+	}
+
+	@ha host ha.home.mrex.dev
+	handle @ha {
+		reverse_proxy host.docker.internal:8123
+	}
+
+	@zwave host zwave.home.mrex.dev
+	handle @zwave {
+		reverse_proxy zwave-js-ui:8091
+	}
+
+	@media host media.home.mrex.dev
+	handle @media {
+		reverse_proxy jellyfin:8096
+	}
+
+	@logseq host logseq.home.mrex.dev
+	handle @logseq {
+		reverse_proxy logseq-sync:8787
+	}
+
+	@status host status.home.mrex.dev
+	handle @status {
+		reverse_proxy uptime-kuma:3001
+	}
+
+	@monitor host monitor.home.mrex.dev
+	handle @monitor {
+		reverse_proxy beszel:8090
+	}
+
+	handle {
+		abort
+	}
+}

@@ -1,0 +1,39 @@
+services:
+  beszel:
+    image: henrygd/beszel:latest
+    container_name: beszel
+    restart: unless-stopped
+    environment:
+      APP_URL: https://monitor.home.mrex.dev
+    ports:
+      - "127.0.0.1:8090:8090"   # loopback only, so the agent can reach the hub
+    volumes:
+      - /srv/appdata/beszel/data:/beszel_data
+      - /srv/appdata/beszel/socket:/beszel_socket
+    networks: [proxy]
+
+  beszel-agent:
+    image: henrygd/beszel-agent-nvidia:latest
+    container_name: beszel-agent
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /srv/appdata/beszel/agent:/var/lib/beszel-agent
+      - /srv/appdata/beszel/socket:/beszel_socket
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      LISTEN: /beszel_socket/beszel.sock
+      HUB_URL: http://localhost:8090
+      TOKEN: ${BESZEL_TOKEN}
+      KEY: ${BESZEL_KEY}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [utility]
+
+networks:
+  proxy:
+    external: true
