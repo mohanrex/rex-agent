@@ -1,0 +1,25 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin:latest   # pin a version tag once it works
+    container_name: jellyfin
+    user: "1000:1000"
+    restart: unless-stopped
+    volumes:
+      - /srv/appdata/jellyfin:/config
+      - /srv/media/jellyfin-cache:/cache
+      - /srv/media/library:/media:ro
+    ports:
+      - "8096:8096"                   # home network, for the TV app
+    networks: [proxy]
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+networks:
+  proxy:
+    external: true

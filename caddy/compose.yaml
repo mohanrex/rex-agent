@@ -11,7 +11,11 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - /srv/appdata/caddy/data:/data
       - /srv/appdata/caddy/config:/config
-    networks: [proxy]
+    networks:
+      proxy:
+        aliases:
+          - ha.home.mrex.dev
+          - logseq.home.mrex.dev
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
