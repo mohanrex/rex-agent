@@ -1,7 +1,7 @@
 services:
   homeassistant:
     container_name: homeassistant
-    image: ghcr.io/home-assistant/home-assistant:2026.10.1   # Renovate bumps this
+    image: ghcr.io/home-assistant/home-assistant:2026.10.2   # Renovate bumps this
     volumes:
       - /srv/appdata/homeassistant:/config
       - /etc/localtime:/etc/localtime:ro
